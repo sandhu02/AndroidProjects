@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$/basic-android-kotlin-compose-training-affirmations" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/basic-android-kotlin-compose-training-bus-schedule-app" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/basic-android-kotlin-compose-training-cupcake" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/basic-android-kotlin-compose-training-dessert-clicker" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/basic-android-kotlin-compose-training-inventory-app" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/basic-android-kotlin-compose-training-lunch-tray" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/basic-android-kotlin-compose-training-mars-photos" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/basic-android-kotlin-compose-training-race-tracker" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/basic-android-kotlin-compose-training-tip-calculator" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/basic-android-kotlin-compose-training-unscramble" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/basic-android-kotlin-compose-training-woof" vcs="Git" />
+  </component>
+</project>

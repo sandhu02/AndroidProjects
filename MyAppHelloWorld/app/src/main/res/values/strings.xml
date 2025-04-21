@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">My App Hello World</string>
+    <string name="happy_birthday_sam">happy birthday sam</string>
+    <string name="from_text">from Awais</string>
+    <string name="firstText">All tasks completed</string>
+    <string name="secondText">Nice work!</string>
+    <string name="composehead1">Text composable</string>
+    <string name="composebody1">Displays text and follows the recommended Material Design guidelines.</string>
+    <string name="composehead2">Image composable</string>
+    <string name="composebody2">Creates a composable that lays out and draws a given Painter class object.</string>
+    <string name="composehead3">Row composable</string>
+    <string name="composebody3">A layout composable that places its children in a horizontal sequence.</string>
+    <string name="composehead4">Column composable</string>
+    <string name="composebody4">A layout composable that places its children in a vertical sequence.</string>
+</resources>
