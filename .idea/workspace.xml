@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="6794dcf1-9ab2-48da-a4e5-4ec061999321" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/AndroidStudioProjects.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/basic-android-kotlin-compose-training-affirmations" beforeDir="false" afterPath="$PROJECT_DIR$/basic-android-kotlin-compose-training-affirmations" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/basic-android-kotlin-compose-training-bus-schedule-app" beforeDir="false" afterPath="$PROJECT_DIR$/basic-android-kotlin-compose-training-bus-schedule-app" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/basic-android-kotlin-compose-training-cupcake" beforeDir="false" afterPath="$PROJECT_DIR$/basic-android-kotlin-compose-training-cupcake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/basic-android-kotlin-compose-training-dessert-clicker" beforeDir="false" afterPath="$PROJECT_DIR$/basic-android-kotlin-compose-training-dessert-clicker" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/basic-android-kotlin-compose-training-dessert-release" beforeDir="false" afterPath="$PROJECT_DIR$/basic-android-kotlin-compose-training-dessert-release" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/basic-android-kotlin-compose-training-inventory-app" beforeDir="false" afterPath="$PROJECT_DIR$/basic-android-kotlin-compose-training-inventory-app" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/basic-android-kotlin-compose-training-lunch-tray" beforeDir="false" afterPath="$PROJECT_DIR$/basic-android-kotlin-compose-training-lunch-tray" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/basic-android-kotlin-compose-training-mars-photos" beforeDir="false" afterPath="$PROJECT_DIR$/basic-android-kotlin-compose-training-mars-photos" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/basic-android-kotlin-compose-training-race-tracker" beforeDir="false" afterPath="$PROJECT_DIR$/basic-android-kotlin-compose-training-race-tracker" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/basic-android-kotlin-compose-training-tip-calculator" beforeDir="false" afterPath="$PROJECT_DIR$/basic-android-kotlin-compose-training-tip-calculator" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/basic-android-kotlin-compose-training-unscramble" beforeDir="false" afterPath="$PROJECT_DIR$/basic-android-kotlin-compose-training-unscramble" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/basic-android-kotlin-compose-training-woof" beforeDir="false" afterPath="$PROJECT_DIR$/basic-android-kotlin-compose-training-woof" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/basic-android-kotlin-compose-training-workmanager" beforeDir="false" afterPath="$PROJECT_DIR$/basic-android-kotlin-compose-training-workmanager" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unscramble" beforeDir="false" afterPath="$PROJECT_DIR$/unscramble" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="2w39P3IyxTz0hl33EB72jjTmY7O" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "android.gradle.sync.needed": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6794dcf1-9ab2-48da-a4e5-4ec061999321" name="Changes" comment="" />
+      <created>1745259365044</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1745259365044</updated>
+    </task>
+    <servers />
+  </component>
+</project>
