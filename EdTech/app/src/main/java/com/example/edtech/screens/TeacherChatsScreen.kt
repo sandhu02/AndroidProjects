@@ -112,9 +112,12 @@ fun ChatsBottomBar(
                         .padding(vertical = 8.dp)
                 ) {
                     menuItems.forEach { item ->
-                        MenuCard(
-                            user = item , navController = navController , viewModel = viewModel,
-                        )
+                        if (!viewModel.isThisUserCurrentUser(item)) {
+                            MenuCard(
+                                user = item , navController = navController , viewModel = viewModel,
+                            )
+                        }
+
                         if (item != menuItems.last()) {
                             HorizontalDivider(
                                 thickness = 1.dp,
@@ -149,7 +152,9 @@ fun TeacherChatsScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp )
         ) {
             items(teacherChatUiState.allUsers) { item ->
-                ChatCard(user = item , navController = navController , viewModel = viewModel)
+                if (!viewModel.isThisUserCurrentUser(item)) {
+                    ChatCard(user = item , navController = navController , viewModel = viewModel)
+                }
             }
         }
     }

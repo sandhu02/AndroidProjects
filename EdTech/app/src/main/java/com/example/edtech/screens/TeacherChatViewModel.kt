@@ -24,7 +24,8 @@ data class ChatUiState(
 data class TeacherChatUiState(
     val name: String = "",
     val allUsers: List<User> = emptyList(),
-    val selectedUser: User? = null
+    val selectedUser: User? = null,
+    val currentUser:User? = null
 )
 
 class TeacherChatViewModel () : ViewModel() {
@@ -43,6 +44,21 @@ class TeacherChatViewModel () : ViewModel() {
     fun updateMessageField(message: String) {
         _chatUitate.update { it.copy(messageField = message) }
     }
+
+    init {
+        _chatUitate.update { it.copy(senderId = currentUid.toString()) }
+        getAllUsers()
+        getCurrentUser() // ✅ load once
+    }
+
+    private fun getCurrentUser() {
+        getUserData(currentUid.toString()) { user ->
+            if (user != null) {
+                _teacherChatUiState.update { it.copy(currentUser = user) }
+            }
+        }
+    }
+
 
     fun getAllUsers() {
         viewModelScope.launch {
@@ -119,9 +135,11 @@ class TeacherChatViewModel () : ViewModel() {
         }
     }
 
-    init {
-        _chatUitate.update { it.copy(senderId = currentUid.toString()) }
-        getAllUsers()
+    fun isThisUserCurrentUser(selectedUser: User?): Boolean {
+        val currentUser = teacherChatUiState.value.currentUser
+        return selectedUser?.email == currentUser?.email
     }
+
+
 }
 

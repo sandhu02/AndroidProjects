@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1008821792628",
+    "project_id": "fir-ai-sample-3a7e9",
+    "storage_bucket": "fir-ai-sample-3a7e9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1008821792628:android:37a6d59bb1980229134621",
+        "android_client_info": {
+          "package_name": "com.example.rtcaudio"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1Oc2cVxTVelzqqPyKPbkw4EY7IPOHSNY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
