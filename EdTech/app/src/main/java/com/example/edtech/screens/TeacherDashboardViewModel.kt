@@ -3,7 +3,7 @@ package com.example.edtech.screens
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.edtech.FirebaseAuth.AuthenticationManager
+import com.example.edtech.firebase.AuthenticationManager
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow

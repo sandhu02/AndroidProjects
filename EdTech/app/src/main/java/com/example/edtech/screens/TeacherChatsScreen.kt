@@ -5,13 +5,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PersonPin
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,6 +32,7 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.SupervisorAccount
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -49,7 +49,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.edtech.EdTechAppScreens
 import com.example.edtech.EdTechViewModelFactory
-import com.example.edtech.FirebaseAuth.User
+import com.example.edtech.firebase.User
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -144,16 +144,29 @@ fun TeacherChatsScreen(
         topBar = { ChatsTopBar(navController) },
         bottomBar = { ChatsBottomBar(navController , teacherChatUiState , viewModel) }
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .padding(innerPadding)
-                .padding(10.dp),
+        if (teacherChatUiState.isLoading) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding).padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+                CircularProgressIndicator()
+            }
+        }
+        else {
+            LazyColumn(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .padding(10.dp),
 
-            verticalArrangement = Arrangement.spacedBy(8.dp )
-        ) {
-            items(teacherChatUiState.allUsers) { item ->
-                if (!viewModel.isThisUserCurrentUser(item)) {
-                    ChatCard(user = item , navController = navController , viewModel = viewModel)
+                verticalArrangement = Arrangement.spacedBy(8.dp )
+            ) {
+                items(teacherChatUiState.allUsers) { item ->
+                    if (!viewModel.isThisUserCurrentUser(item)) {
+                        ChatCard(user = item , navController = navController , viewModel = viewModel)
+                    }
                 }
             }
         }
@@ -206,7 +219,7 @@ fun ChatCard (
                 )
             }
             Text(
-                text = user.role,
+                text = if (user.role == "student") "Student" else "Teacher",
                 style = MaterialTheme.typography.bodyLarge ,
                 fontWeight = FontWeight.Bold,
 

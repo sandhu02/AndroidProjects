@@ -3,13 +3,13 @@ package com.example.edtech
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.edtech.FirebaseAuth.AuthenticationManager
+import com.example.edtech.firebase.AuthenticationManager
 import com.example.edtech.screens.SignInViewModel
 import com.example.edtech.screens.TeacherChatViewModel
 import com.example.edtech.screens.TeacherDashboardViewModel
 
 class EdTechViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
-    val authenticationManager = AuthenticationManager()
+    val authenticationManager = AuthenticationManager(context)
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(SignInViewModel::class.java)) {

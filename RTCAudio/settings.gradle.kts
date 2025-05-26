@@ -16,6 +16,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url = uri("https://webrtc.github.io/webrtc-org/native-code/android/")
+        }
+
     }
 }
 

@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">RTCAudio</string>
+
+    <string name="start_call">Start Call</string>
+    <string name="answer_call">Answer Call</string>
+    <string name="end_call">End Call</string>
+    <string name="listen_for_calls">Listen for Incoming Calls</string>
+    <string name="enter_call_id">Enter Call ID</string>
+    <string name="calling">Calling...</string>
+    <string name="connected">Connected</string>
+    <string name="ringing">Ringing...</string>
+    <string name="idle">Idle</string>
+    <string name="grant_permissions">Grant Permissions</string>
+    <string name="permission_required">Audio Call App needs permissions to function</string>
+    <string name="permission_message">Please grant microphone and audio permissions</string>
 </resources>

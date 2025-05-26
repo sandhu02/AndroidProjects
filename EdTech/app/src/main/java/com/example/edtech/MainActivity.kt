@@ -1,12 +1,12 @@
 package com.example.edtech
 
+import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.example.edtech.ui.theme.EdTechTheme
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,5 +19,16 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+}
 
+class EdTechApplication : Application () {
+    override fun onCreate() {
+        super.onCreate()
+        instance = this
+    }
+
+    companion object {
+        lateinit var instance: EdTechApplication
+            private set
+    }
 }

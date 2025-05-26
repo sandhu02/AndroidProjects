@@ -1,6 +1,8 @@
 package com.example.edtech.screens
 
 import android.util.Log
+import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -11,6 +13,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -23,15 +26,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.edtech.EdTechViewModelFactory
-import com.example.edtech.ui.theme.EdTechTheme
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
-import com.example.edtech.EdTechAppScreens
+import com.example.edtech.R
 
 @Composable
 fun SignInScreen(
@@ -168,7 +170,8 @@ fun SignInScreen(
                 leadingIcon = {
                     Icon(Icons.Default.Email, contentDescription = "Email")
                 },
-                singleLine = true
+                singleLine = true ,
+                enabled = if (uiState.isSignIn) !signInstate.isLoading else !signUpstate.isLoading
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -186,13 +189,14 @@ fun SignInScreen(
                     // Use alternative icons from the default Icons.Default package
                     IconButton(onClick = { viewModel.togglePasswordVisibility() }) {
                         Icon(
-                            imageVector = if (uiState.showPasword) Icons.Default.Check else Icons.Default.Lock,
-                            contentDescription = if (uiState.showPasword) "Hide Password" else "Show Password"
+                            imageVector = if (uiState.showPassword) Icons.Default.Check else Icons.Default.Lock,
+                            contentDescription = if (uiState.showPassword) "Hide Password" else "Show Password"
                         )
                     }
                 },
-                visualTransformation = if (uiState.showPasword) VisualTransformation.None else PasswordVisualTransformation(),
-                singleLine = true
+                visualTransformation = if (uiState.showPassword) VisualTransformation.None else PasswordVisualTransformation(),
+                singleLine = true,
+                enabled = if (uiState.isSignIn) !signInstate.isLoading else !signUpstate.isLoading
             )
 
             // Confirm Password Field (only for registration)
@@ -208,7 +212,8 @@ fun SignInScreen(
                         Icon(Icons.Default.Lock, contentDescription = "Confirm Password")
                     },
                     visualTransformation = PasswordVisualTransformation(),
-                    singleLine = true
+                    singleLine = true,
+                    enabled = !signUpstate.isLoading
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -220,8 +225,7 @@ fun SignInScreen(
                     leadingIcon = {
                         Icon(Icons.Default.PersonOutline, contentDescription = "enter name")
                     },
-                    visualTransformation = PasswordVisualTransformation(),
-                    singleLine = true
+                    enabled = !signUpstate.isLoading
                 )
             }
 
@@ -280,7 +284,7 @@ fun SignInScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = if (uiState.isSignIn) "Don't have an account? " else "Already have an account? ",
+                    text = if (uiState.isSignIn) "Don't have an account?" else "Already have an account?",
                     color = Color.Gray
                 )
 
@@ -294,15 +298,25 @@ fun SignInScreen(
             }
 
             Spacer(modifier = Modifier.height(16.dp) )
-            if (signInstate.error!=null){Text(signInstate.error.toString(), color = Color.Red)}
-            else if (signUpstate.error!=null){Text(signUpstate.error.toString(), color = Color.Red)}
+            if (signInstate.error!=null){Toast.makeText(LocalContext.current, signInstate.error.toString(), Toast.LENGTH_SHORT).show() }
+            else if (signUpstate.error!=null){Toast.makeText(LocalContext.current, signUpstate.error.toString(), Toast.LENGTH_SHORT).show()}
 
-            Button(
+            OutlinedButton(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = { navController.navigate(EdTechAppScreens.TeacherDashboard.name) },
-                colors = ButtonDefaults.buttonColors(containerColor = secondaryColor)
+                enabled = uiState.role != "" ,
+                onClick = { viewModel.signInWithGoogle() }
             ) {
-                Text("Guest")
+                Image(
+                    painter = painterResource(id = R.drawable.google_logo),
+                    contentDescription = null ,
+                    modifier = Modifier.size(36.dp)
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(
+                    text = "Sign-in with Google" ,
+                    fontWeight = FontWeight.Bold ,
+                    style = MaterialTheme.typography.titleMedium
+                )
             }
         }
     }

@@ -3,10 +3,11 @@ package com.example.edtech.screens
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.edtech.FirebaseAuth.AuthResponse
-import com.example.edtech.FirebaseAuth.AuthenticationManager
-import com.example.edtech.FirebaseAuth.getUserData
+import com.example.edtech.firebase.AuthResponse
+import com.example.edtech.firebase.AuthenticationManager
+import com.example.edtech.firebase.getUserData
 import android.content.Context
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -34,7 +35,7 @@ data class SignInScreenUiState(
     val name:String = "",
     val role:String = "",
     val isSignIn: Boolean = true,
-    val showPasword: Boolean = false
+    val showPassword: Boolean = false
 )
 
 class SignInViewModel(
@@ -148,6 +149,7 @@ class SignInViewModel(
                     }
                 }
                 else {
+                    Log.d("SignInViewModel", "unsuccessful registration : ${response.toString()}")
                     _signUpUiState.update {
                         it.copy(
                             error = "unsuccessful registration",
@@ -175,7 +177,7 @@ class SignInViewModel(
     fun togglePasswordVisibility(){
         _signInScreenUiState.update {
             it.copy(
-                showPasword = !it.showPasword
+                showPassword = !it.showPassword
             )
         }
     }
@@ -187,4 +189,51 @@ class SignInViewModel(
             )
         }
     }
+
+    fun signInWithGoogle() {
+        _signInUiState.value = _signInUiState.value.copy(isLoading = true)
+
+        authenticationManager.signInWithGoogle()
+            .onEach { response ->
+                if (response is AuthResponse.Success) {
+                    val uid = FirebaseAuth.getInstance().currentUser?.uid
+                    Log.d("SignInViewModel", "User ID: $uid")
+                    if (uid != null) {
+                        getUserData(uid) { user ->
+                            Log.d("SignInViewModel", "User data: $user")
+                            if (user != null && user.role == _signInScreenUiState.value.role) {
+                                _signInUiState.update {
+                                    it.copy(
+                                        signInSuccess = true,
+                                        isLoading = false
+                                    )
+                                }
+                            } else {
+                                _signInUiState.update {
+                                    it.copy(
+                                        error = "User role not found or mismatched",
+                                        isLoading = false
+                                    )
+                                }
+                            }
+                        }
+                    } else {
+                        _signInUiState.update {
+                            it.copy(
+                                error = "User ID is null",
+                                isLoading = false
+                            )
+                        }
+                    }
+                } else if (response is AuthResponse.Error) {
+                    _signInUiState.update {
+                        it.copy(
+                            error = response.errorMessage ?: "Google sign-in failed",
+                            isLoading = false
+                        )
+                    }
+                }
+            }.launchIn(viewModelScope)
+    }
+
 }

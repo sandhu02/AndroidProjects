@@ -1,8 +1,7 @@
-package com.example.edtech.FirebaseAuth
+package com.example.edtech.firebase
 
 import android.util.Log
 import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.TaskCompletionSource
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore

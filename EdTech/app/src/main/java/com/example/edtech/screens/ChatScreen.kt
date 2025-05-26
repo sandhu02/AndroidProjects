@@ -1,6 +1,8 @@
 package com.example.edtech.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,12 +13,17 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.PersonOutline
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Send
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -39,6 +46,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.edtech.EdTechViewModelFactory
+import com.example.edtech.firebase.ChatMessage
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -67,6 +75,9 @@ fun ChatTopBar(
             IconButton(onClick = {  }) {
                 Icon(Icons.Default.PersonOutline, contentDescription = "Profile pic")
             }
+            IconButton(onClick = {  }) {
+                Icon(Icons.Default.Call, contentDescription = "Call")
+            }
         }
     )
 }
@@ -90,53 +101,89 @@ fun ChatScreen(
         }
     }
 
-
     Scaffold(
         topBar = { ChatTopBar(navController , teacherChatUiState) },
         bottomBar = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(22.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                OutlinedTextField(
-                    value = chatUiState.messageField,
-                    onValueChange = { viewModel.updateMessageField(it) },
-                    modifier = Modifier.weight(1f),
-                    placeholder = { Text("Type a message") },
-                    shape = RoundedCornerShape(50.dp)
-                )
-                IconButton(onClick = {
-                    viewModel.sendMessage()
-                }) {
-                    Icon(
-                        imageVector = Icons.Default.Send,
-                        contentDescription = "Send",
-                        modifier = Modifier.scale(1.5f)
+            NavigationBar {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    OutlinedTextField(
+                        value = chatUiState.messageField,
+                        onValueChange = { viewModel.updateMessageField(it) },
+                        modifier = Modifier.weight(1f),
+                        placeholder = { Text("Type a message") },
+                        shape = RoundedCornerShape(50.dp)
                     )
+                    IconButton(onClick = {
+                        viewModel.sendMessage()
+                        viewModel.updateMessageField("")
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Send,
+                            contentDescription = "Send",
+                            modifier = Modifier.scale(1.5f)
+                        )
+                    }
                 }
             }
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding).padding(16.dp),
-            verticalArrangement = Arrangement.Top
-        ) {
-            LazyColumn () {
-                items(chatUiState.chatMessages) { message ->
-                    if (message.senderId == chatUiState.senderId) {
-                        Text(text = message.toString() , color = Color.Green)
+        if (chatUiState.isLoading) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding).padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+                CircularProgressIndicator()
+            }
+        }
+        else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding).padding(16.dp),
+                verticalArrangement = Arrangement.Top
+            ) {
+                LazyColumn () {
+                    items(chatUiState.chatMessages) { message ->
+                        ChatBubble(message , viewModel , chatUiState)
                     }
-                    else {
-                        Text(text = message.toString() , color = Color.Red)
-                    }
-
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun ChatBubble(message: ChatMessage, viewModel: TeacherChatViewModel , chatUiState: ChatUiState) {
+    val bubbleColor = if (message.senderId == chatUiState.senderId) Color(0xFFDCF8C6) else Color(0xFFFFFFFF)
+    val alignment = if (message.senderId == chatUiState.senderId) Alignment.End else Alignment.Start
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 4.dp),
+        horizontalArrangement = if (message.senderId == chatUiState.senderId) Arrangement.End else Arrangement.Start
+    ) {
+        Column(
+            modifier = Modifier
+                .background(bubbleColor, shape = RoundedCornerShape(8.dp))
+                .padding(8.dp)
+        ) {
+            Text(text = message.text)
+            Text(
+                text = viewModel.formatTimeFromMillis(message.timestamp),
+                color = Color.Gray,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.align(Alignment.End)
+            )
         }
     }
 }
