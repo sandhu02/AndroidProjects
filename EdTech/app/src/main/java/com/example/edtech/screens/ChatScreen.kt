@@ -2,7 +2,6 @@ package com.example.edtech.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,7 +14,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.PersonOutline
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,7 +21,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -33,20 +30,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.edtech.EdTechViewModelFactory
-import com.example.edtech.firebase.ChatMessage
+import com.example.edtech.model.ChatMessage
+import com.example.edtech.screens.teacherScreens.ChatUiState
+import com.example.edtech.screens.teacherScreens.TeacherChatUiState
+import com.example.edtech.screens.teacherScreens.TeacherChatViewModel
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -162,28 +157,38 @@ fun ChatScreen(
 }
 
 @Composable
-fun ChatBubble(message: ChatMessage, viewModel: TeacherChatViewModel , chatUiState: ChatUiState) {
-    val bubbleColor = if (message.senderId == chatUiState.senderId) Color(0xFFDCF8C6) else Color(0xFFFFFFFF)
-    val alignment = if (message.senderId == chatUiState.senderId) Alignment.End else Alignment.Start
+fun ChatBubble(message: ChatMessage, viewModel: TeacherChatViewModel, chatUiState: ChatUiState) {
+    val isSender = message.senderId == chatUiState.senderId
+    val bubbleColor = if (isSender) {
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+    } else {
+        MaterialTheme.colorScheme.surfaceVariant
+    }
+    val textColor = MaterialTheme.colorScheme.onSurface
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp, vertical = 4.dp),
-        horizontalArrangement = if (message.senderId == chatUiState.senderId) Arrangement.End else Arrangement.Start
+        horizontalArrangement = if (isSender) Arrangement.End else Arrangement.Start
     ) {
         Column(
             modifier = Modifier
-                .background(bubbleColor, shape = RoundedCornerShape(8.dp))
-                .padding(8.dp)
+                .background(bubbleColor, shape = RoundedCornerShape(12.dp))
+                .padding(12.dp)
         ) {
-            Text(text = message.text)
+            Text(
+                text = message.text,
+                color = textColor,
+                style = MaterialTheme.typography.bodyMedium
+            )
             Text(
                 text = viewModel.formatTimeFromMillis(message.timestamp),
-                color = Color.Gray,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.align(Alignment.End)
             )
         }
     }
 }
+

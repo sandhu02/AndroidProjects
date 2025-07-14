@@ -1,4 +1,4 @@
-package com.example.edtech.screens
+package com.example.edtech.screens.teacherScreens
 
 import android.content.Context
 import androidx.lifecycle.ViewModel

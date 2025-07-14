@@ -1,4 +1,4 @@
-package com.example.edtech.screens
+package com.example.edtech.screens.studentScreens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -93,7 +93,7 @@ fun StudentHomeScreen(navController: NavController) {
             val content by remember(currentTab) {
                 mutableStateOf(
                     when (currentTab) {
-                        "courses" -> { @androidx.compose.runtime.Composable { PlaceholderScreen("Explore Courses") } }
+                        "courses" -> { @Composable { PlaceholderScreen("Explore Courses") } }
                         "my_courses" -> { { PlaceholderScreen("My Learning") } }
                         "flashcards" -> { { FlashcardsScreen(navController) } }
                         "discussions" -> { { DiscussionsScreen(navController) } }

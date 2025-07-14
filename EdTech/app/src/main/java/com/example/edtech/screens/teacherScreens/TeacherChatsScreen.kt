@@ -1,4 +1,4 @@
-package com.example.edtech.screens
+package com.example.edtech.screens.teacherScreens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -49,7 +49,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.edtech.EdTechAppScreens
 import com.example.edtech.EdTechViewModelFactory
-import com.example.edtech.firebase.User
+import com.example.edtech.model.User
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,7 +71,7 @@ fun ChatsTopBar(
 }
 @Composable
 fun ChatsBottomBar(
-    navController: NavController ,
+    navController: NavController,
     teacherChatUiState: TeacherChatUiState,
     viewModel: TeacherChatViewModel
 ) {

@@ -1,4 +1,4 @@
-package com.example.edtech.screens
+package com.example.edtech.screens.teacherScreens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -6,20 +6,23 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.AddCircleOutline
 import androidx.compose.material.icons.filled.ChatBubble
-import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.PowerSettingsNew
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.outlined.Explore
+import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -29,17 +32,19 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
 import com.example.edtech.EdTechAppScreens
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.edtech.EdTechViewModelFactory
-
+import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
+import androidx.compose.material3.CardDefaults
+import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -69,7 +74,7 @@ fun TeachertopBar(
 }
 
 @Composable
-fun teacherBottomBar(navController: NavController) {
+fun TeacherBottomBar(navController: NavController) {
     NavigationBar {
         NavigationBarItem(
             icon = { Icon(Icons.Filled.ChatBubble , contentDescription = "Chats") },
@@ -81,7 +86,7 @@ fun teacherBottomBar(navController: NavController) {
             icon = { Icon(Icons.Filled.AddCircleOutline , contentDescription = "Add") },
             label = { Text("Add Course") },
             selected = true,
-            onClick = {  }
+            onClick = { navController.navigate(EdTechAppScreens.AddCourseScreen.name) }
         )
         NavigationBarItem(
             icon = { Icon(Icons.Filled.AccountCircle , contentDescription = "Profile") },
@@ -111,7 +116,7 @@ fun TeacherDashboard(
     Scaffold (
         topBar = { TeachertopBar(viewModel , navController) },
 
-        bottomBar = { teacherBottomBar(navController) }
+        bottomBar = { TeacherBottomBar(navController) }
     ) { innerPadding ->
         Box(modifier = Modifier.fillMaxSize()) {
             Column(
@@ -119,7 +124,14 @@ fun TeacherDashboard(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "Teacher Dashboard")
+                LazyVerticalStaggeredGrid(
+                    columns = StaggeredGridCells.Fixed(2),
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    itemsIndexed(dashGrid) { index, item ->
+                        DashboardCard(item, index , navController)
+                    }
+                }
             }
             if (signOutUiState.isLoading) {
                 Box(
@@ -136,3 +148,37 @@ fun TeacherDashboard(
 
     }
 }
+
+@Composable
+fun DashboardCard(item: String, index: Int , navController: NavController) {
+    val cardHeight = when (index % 3) {
+        0 -> 150.dp
+        1 -> 220.dp
+        else -> 180.dp
+    }
+
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .height(cardHeight),
+
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primary
+        ),
+        onClick = { navController.navigate(EdTechAppScreens.TeacherCoursesScreen.name) }
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                item,
+                style = MaterialTheme.typography.displayMedium ,
+                modifier = Modifier.padding(4.dp)
+            )
+        }
+    }
+}
+
+
+val dashGrid = listOf("My Courses" ,  "Enrolled Students" , "Assignments" , "Grades" , "Attendance")

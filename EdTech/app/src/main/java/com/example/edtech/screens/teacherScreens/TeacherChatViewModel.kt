@@ -1,15 +1,15 @@
-package com.example.edtech.screens
+package com.example.edtech.screens.teacherScreens
 
 import android.os.Build
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.edtech.firebase.ChatMessage
-import com.example.edtech.firebase.User
 import com.example.edtech.firebase.getAllUsers
 import com.example.edtech.firebase.getMessages
 import com.example.edtech.firebase.getUserData
 import com.example.edtech.firebase.sendMessage
+import com.example.edtech.model.ChatMessage
+import com.example.edtech.model.User
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

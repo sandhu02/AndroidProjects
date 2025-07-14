@@ -10,18 +10,20 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.edtech.screens.ChatScreen
 import com.example.edtech.screens.SignInScreen
-import com.example.edtech.screens.StudentHomeScreen
-import com.example.edtech.screens.TeacherChatsScreen
-import com.example.edtech.screens.TeacherDashboard
-import com.example.edtech.screens.TestScreen
-
+import com.example.edtech.screens.studentScreens.StudentHomeScreen
+import com.example.edtech.screens.teacherScreens.AddCourseScreen
+import com.example.edtech.screens.teacherScreens.TeacherChatsScreen
+import com.example.edtech.screens.teacherScreens.TeacherCoursesScreen
+import com.example.edtech.screens.teacherScreens.TeacherDashboard
 
 enum class EdTechAppScreens(val title : String) {
     SignIn(title = "SignIn"),
     TeacherDashboard(title = "TeacherDashboard"),
+    TeacherCoursesScreen(title = "TeacherCoursesScreen"),
+    AddCourseScreen(title = "AddCourseScreen"),
     StudentHome(title = "StudentHome"),
     TeacherChats(title = "TeacherChats"),
-    ChatScreen(title = "ChatScreen")
+    ChatScreen(title = "ChatScreen"),
 }
 
 @Composable
@@ -60,6 +62,12 @@ fun EdTechApp(
         }
         composable(route = EdTechAppScreens.TeacherDashboard.name){
             TeacherDashboard(navController = navController)
+        }
+        composable(route = EdTechAppScreens.TeacherCoursesScreen.name){
+            TeacherCoursesScreen(navController = navController)
+        }
+        composable(route = EdTechAppScreens.AddCourseScreen.name) {
+            AddCourseScreen(navController = navController)
         }
         composable(route = EdTechAppScreens.StudentHome.name){
             StudentHomeScreen(navController)

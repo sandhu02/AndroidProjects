@@ -1,33 +1,31 @@
 package com.example.edtech.firebase
 
 import android.util.Log
+import com.example.edtech.model.ChatMessage
+import com.example.edtech.model.Course
+import com.example.edtech.model.User
 import com.google.android.gms.tasks.Task
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
 
-data class User(
-    val email: String = "",
-    val role: String = "",
-    val name: String = ""
-)
-data class ChatMessage(
-    val senderId: String = "",
-    val text: String = "",
-    val timestamp: Long = System.currentTimeMillis()
-)
 
-
-fun saveUserRoleToFirestore(uid: String?, role: String , name: String) : Task<Void> {
+fun saveUserRoleToFirestore(
+    uid: String?,
+    role: String ,
+    name: String ,
+    email : String? =FirebaseAuth.getInstance().currentUser?.email
+) : Task<Void> {
     val db = FirebaseFirestore.getInstance()
     val userMap = hashMapOf(
-        "role" to role,
-        "email" to FirebaseAuth.getInstance().currentUser?.email ,
+        "role" to role ,
+        "email" to email ,
         "name" to name
     )
 
@@ -106,4 +104,48 @@ fun getAllUsers(onComplete: (List<User>) -> Unit, onError: (Exception) -> Unit) 
             Log.w("Firestore", "Error getting documents", exception)
             onError(exception)
         }
+}
+
+fun getAllCourses(onComplete: (List<Course>) -> Unit , onError: (Exception) -> Unit) {
+    val courses = mutableListOf<Course>()
+
+    val db = FirebaseFirestore.getInstance()
+    db.collection("courses")
+        .get()
+        .addOnSuccessListener { result ->
+            try {
+                for (document in result) {
+                    val title = document.getString("title") ?: continue
+                    val description = document.getString("description") ?: continue
+                    val author = document.getString("author") ?: continue
+                    val rating = document.getLong("rating") ?: continue
+
+                    val course = Course(
+                        title = title,
+                        description = description,
+                        author = author,
+                        rating = rating.toInt()
+                    )
+                    courses.add(course)
+
+                    onComplete(courses)
+                }
+            }
+            catch (e: Exception) {
+                onError(e)
+            }
+        }
+        .addOnFailureListener { exception -> onError(exception) }
+}
+
+fun addCourseToFireStore(course: Course) {
+    val db = FirebaseFirestore.getInstance()
+    val courseId = course.author
+
+    db.collection("courses")
+        .document(courseId.toString())
+        .set(course)
+
+        .addOnSuccessListener {doc ->  Log.d ("FireStore","Success") }
+        .addOnFailureListener { doc -> Log.e("FireStore","Failure") }
 }

@@ -8,6 +8,7 @@ import com.example.edtech.firebase.AuthenticationManager
 import com.example.edtech.firebase.getUserData
 import android.content.Context
 import android.util.Log
+import com.example.edtech.firebase.saveUserRoleToFirestore
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -113,8 +114,12 @@ class SignInViewModel(
             }.launchIn(viewModelScope)
     }
 
-    fun register() {
-        val password = _signInScreenUiState.value.password
+    fun register(
+        email : String = _signInScreenUiState.value.email,
+        password : String = _signInScreenUiState.value.password,
+        role : String = _signInScreenUiState.value.role,
+        name : String = _signInScreenUiState.value.name
+    ) {
         val confirmPassword = _signInScreenUiState.value.confirmPassword
 
         if (!confirmPassword(password, confirmPassword)) {
@@ -125,10 +130,10 @@ class SignInViewModel(
         _signUpUiState.value = _signUpUiState.value.copy(isLoading = true)
 
         authenticationManager.createAccountWithEmail(
-            email = _signInScreenUiState.value.email,
-            password = _signInScreenUiState.value.password ,
-            role = _signInScreenUiState.value.role,
-            name = _signInScreenUiState.value.name
+            email = email,
+            password = password,
+            role = role,
+            name = name
         )
             .onEach { response ->
                 if (response is AuthResponse.Success) {
@@ -197,32 +202,48 @@ class SignInViewModel(
             .onEach { response ->
                 if (response is AuthResponse.Success) {
                     val uid = FirebaseAuth.getInstance().currentUser?.uid
-                    Log.d("SignInViewModel", "User ID: $uid")
-                    if (uid != null) {
+                    val firebaseUser = FirebaseAuth.getInstance().currentUser
+
+                    if (uid != null && firebaseUser != null) {
                         getUserData(uid) { user ->
-                            Log.d("SignInViewModel", "User data: $user")
-                            if (user != null && user.role == _signInScreenUiState.value.role) {
-                                _signInUiState.update {
-                                    it.copy(
-                                        signInSuccess = true,
-                                        isLoading = false
-                                    )
+                            if (user != null) {
+                                if (user.role == _signInScreenUiState.value.role) {
+                                    _signInUiState.update {
+                                        it.copy(signInSuccess = true, isLoading = false)
+                                    }
+                                } else {
+                                    _signInUiState.update {
+                                        it.copy(
+                                            error = "User role mismatch",
+                                            isLoading = false
+                                        )
+                                    }
                                 }
                             } else {
-                                _signInUiState.update {
-                                    it.copy(
-                                        error = "User role not found or mismatched",
-                                        isLoading = false
-                                    )
+                                // User does not exist, register them
+                                val defaultName = firebaseUser.displayName ?: "No Name"
+                                val email = firebaseUser.email ?: "no_email@domain.com"
+                                val role = _signInScreenUiState.value.role
+
+                                saveUserRoleToFirestore(
+                                    uid = uid,
+                                    name = defaultName,
+                                    email = email,
+                                    role = role
+                                ).addOnSuccessListener {
+                                    _signInUiState.update {
+                                        it.copy(signInSuccess = true, isLoading = false)
+                                    }
+                                }.addOnFailureListener {
+                                    _signInUiState.update {
+                                        it.copy(error = "Failed to register user", isLoading = false)
+                                    }
                                 }
                             }
                         }
                     } else {
                         _signInUiState.update {
-                            it.copy(
-                                error = "User ID is null",
-                                isLoading = false
-                            )
+                            it.copy(error = "User ID is null", isLoading = false)
                         }
                     }
                 } else if (response is AuthResponse.Error) {

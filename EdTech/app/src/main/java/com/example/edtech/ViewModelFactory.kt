@@ -5,8 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.edtech.firebase.AuthenticationManager
 import com.example.edtech.screens.SignInViewModel
-import com.example.edtech.screens.TeacherChatViewModel
-import com.example.edtech.screens.TeacherDashboardViewModel
+import com.example.edtech.screens.teacherScreens.AddCourseViewModel
+import com.example.edtech.screens.teacherScreens.TeacherChatViewModel
+import com.example.edtech.screens.teacherScreens.TeacherCoursesViewModel
+import com.example.edtech.screens.teacherScreens.TeacherDashboardViewModel
 
 class EdTechViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
     val authenticationManager = AuthenticationManager(context)
@@ -20,6 +22,12 @@ class EdTechViewModelFactory(private val context: Context) : ViewModelProvider.F
         }
         else if (modelClass.isAssignableFrom(TeacherChatViewModel::class.java)) {
             return TeacherChatViewModel() as T
+        }
+        else if (modelClass.isAssignableFrom(TeacherCoursesViewModel::class.java)) {
+            return TeacherCoursesViewModel() as T
+        }
+        else if(modelClass.isAssignableFrom(AddCourseViewModel::class.java)){
+            return AddCourseViewModel(context) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel class")

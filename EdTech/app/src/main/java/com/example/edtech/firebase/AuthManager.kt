@@ -7,11 +7,16 @@ import android.content.Context
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
+import com.example.edtech.model.User
+import com.google.android.gms.tasks.Task
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -133,6 +138,16 @@ class AuthenticationManager(val context: Context){
 
     fun signOut() {
         auth.signOut()
+    }
+}
+
+fun getSignedInUser(): FirebaseUser?{
+    val currentUser = FirebaseAuth.getInstance().currentUser
+    if (currentUser!=null){
+        return currentUser
+    }
+    else {
+        return null
     }
 }
 
