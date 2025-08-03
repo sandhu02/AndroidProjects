@@ -1,5 +1,6 @@
 package com.example.edtech.screens.teacherScreens
 
+import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -34,7 +35,7 @@ data class TeacherChatUiState(
     val isLoading : Boolean = false
 )
 
-class TeacherChatViewModel () : ViewModel() {
+class TeacherChatViewModel (private val context: Context) : ViewModel() {
     private val _teacherChatUiState = MutableStateFlow(TeacherChatUiState())
     val teacherChatUiState = _teacherChatUiState.asStateFlow()
 
@@ -89,7 +90,7 @@ class TeacherChatViewModel () : ViewModel() {
             if (chatRoomId.isNotEmpty()) {
                 viewModelScope.launch {
                     try {
-                        getMessages(chatRoomId).collect { messages ->
+                        getMessages(chatRoomId , context).collect { messages ->
                             _chatUitate.update { it.copy(chatMessages = messages , isLoading = false) }
                         }
                     } catch (e: Exception) {

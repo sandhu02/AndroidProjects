@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -33,11 +35,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.edtech.EdTechViewModelFactory
 import com.example.edtech.model.ChatMessage
 import com.example.edtech.screens.teacherScreens.ChatUiState
 import com.example.edtech.screens.teacherScreens.TeacherChatUiState
@@ -82,7 +86,7 @@ fun ChatScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
     userEmail: String?,
-    viewModel : TeacherChatViewModel = viewModel (),
+    viewModel : TeacherChatViewModel = viewModel (factory = EdTechViewModelFactory(LocalContext.current)),
 ) {
     val teacherChatUiState by viewModel.teacherChatUiState.collectAsState()
     val chatUiState by viewModel.chatUitate.collectAsState()
@@ -99,7 +103,10 @@ fun ChatScreen(
     Scaffold(
         topBar = { ChatTopBar(navController , teacherChatUiState) },
         bottomBar = {
-            NavigationBar {
+            NavigationBar(
+                modifier = Modifier.imePadding() // prevents overlap by keyboard
+                    .navigationBarsPadding()
+            ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -132,7 +139,9 @@ fun ChatScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(innerPadding).padding(16.dp),
+                    .padding(innerPadding)
+                    .padding(16.dp)
+                    .imePadding(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ){

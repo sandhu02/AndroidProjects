@@ -21,7 +21,7 @@ class EdTechViewModelFactory(private val context: Context) : ViewModelProvider.F
             return TeacherDashboardViewModel(authenticationManager , context = context) as T
         }
         else if (modelClass.isAssignableFrom(TeacherChatViewModel::class.java)) {
-            return TeacherChatViewModel() as T
+            return TeacherChatViewModel(context) as T
         }
         else if (modelClass.isAssignableFrom(TeacherCoursesViewModel::class.java)) {
             return TeacherCoursesViewModel() as T

@@ -1,5 +1,8 @@
 package com.example.edtech.screens.teacherScreens
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -42,6 +45,14 @@ fun AddCourseScreen(
     navController: NavController
 ) {
     val addCourseUiState by viewModel.addCourseUiState.collectAsState()
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            viewModel.setVideoUri(it)
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -97,7 +108,7 @@ fun AddCourseScreen(
                     modifier = Modifier
                         .weight(2f)
                         .fillMaxWidth(),
-                    onClick = { }
+                    onClick = {launcher.launch("video/*") }
                 ) {
                     Column(
                         verticalArrangement = Arrangement.Center,

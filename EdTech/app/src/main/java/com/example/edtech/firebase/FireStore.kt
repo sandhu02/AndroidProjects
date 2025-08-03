@@ -1,16 +1,20 @@
 package com.example.edtech.firebase
 
+import android.content.Context
+import android.net.Uri
 import android.util.Log
+import com.example.edtech.notifications.sendChatNotification
 import com.example.edtech.model.ChatMessage
 import com.example.edtech.model.Course
 import com.example.edtech.model.User
 import com.google.android.gms.tasks.Task
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
@@ -61,8 +65,11 @@ fun sendMessage(chatRoomId: String, message: ChatMessage) {
 }
 
 
-fun getMessages(chatRoomId: String): Flow<List<ChatMessage>> = callbackFlow {
-    val listener = FirebaseFirestore.getInstance().collection("chats")
+fun getMessages(chatRoomId: String, context: Context): Flow<List<ChatMessage>> = callbackFlow {
+    var lastMessageTimestamp: Long? = null
+
+    val listener = FirebaseFirestore.getInstance()
+        .collection("chats")
         .document(chatRoomId)
         .collection("messages")
         .orderBy("timestamp")
@@ -72,12 +79,37 @@ fun getMessages(chatRoomId: String): Flow<List<ChatMessage>> = callbackFlow {
                 return@addSnapshotListener
             }
 
+            val newMessages = mutableListOf<ChatMessage>()
+
+            for (doc in snapshot.documentChanges) {
+                if (doc.type == DocumentChange.Type.ADDED) {
+                    val message = doc.document.toObject(ChatMessage::class.java)
+                    val timestamp = doc.document.getLong("timestamp") ?: continue
+
+                    if (lastMessageTimestamp == null || timestamp > lastMessageTimestamp!!) {
+                        lastMessageTimestamp = timestamp
+                        newMessages.add(message)
+                    }
+                }
+            }
+
+            if (newMessages.isNotEmpty()) {
+                // ✅ Only send notification for the latest added message
+                val latest = newMessages.last()
+                sendChatNotification(
+                    context = context,
+                    notificationTitle = "New Message",
+                    notificationBody = latest.text // or latest.text etc.
+                )
+            }
+
             val messages = snapshot.toObjects(ChatMessage::class.java)
             trySend(messages)
         }
 
     awaitClose { listener.remove() }
 }
+
 
 fun getAllUsers(onComplete: (List<User>) -> Unit, onError: (Exception) -> Unit) {
     val users = mutableListOf<User>()
@@ -148,4 +180,22 @@ fun addCourseToFireStore(course: Course) {
 
         .addOnSuccessListener {doc ->  Log.d ("FireStore","Success") }
         .addOnFailureListener { doc -> Log.e("FireStore","Failure") }
+}
+
+fun uploadVideoToFirebase(
+    videoUri: Uri,
+    onSuccess: (downloadUrl: String) -> Unit,
+    onFailure: (Exception) -> Unit
+) {
+    val storageRef = FirebaseStorage.getInstance().reference
+    val fileName = "videos/${System.currentTimeMillis()}.mp4"
+    val videoRef = storageRef.child(fileName)
+
+    videoRef.putFile(videoUri)
+        .addOnSuccessListener {
+            videoRef.downloadUrl.addOnSuccessListener { uri ->
+                onSuccess(uri.toString())
+            }.addOnFailureListener { onFailure(it) }
+        }
+        .addOnFailureListener { onFailure(it) }
 }
