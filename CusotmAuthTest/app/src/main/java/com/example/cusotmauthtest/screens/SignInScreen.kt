@@ -20,17 +20,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.cusotmauthtest.AuthTestScreens
 import com.example.cusotmauthtest.AuthTestViewModelFactory
+import com.google.firebase.Firebase
+import com.google.firebase.messaging.messaging
+import kotlinx.coroutines.tasks.await
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignInScreen(
     navController: NavController,
-    viewModel: SignInViewModel = viewModel(factory = AuthTestViewModelFactory())
+    viewModel: SignInViewModel = viewModel(factory = AuthTestViewModelFactory(context = LocalContext.current))
 ) {
     val signInUiState by viewModel.signInUiState.collectAsState()
 
@@ -50,17 +57,18 @@ fun SignInScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             TextField(
                 value = signInUiState.username ,
                 onValueChange = {viewModel.updateUsername(it)} ,
-                placeholder = {Text("Username")}
+                placeholder = {Text("Username")},
+                modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(20.dp))
             TextField(
                 value = signInUiState.password ,
                 onValueChange = {viewModel.updatePassword(it)} ,
-                placeholder = {Text("Password")}
+                placeholder = {Text("Password")},
+                modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -98,6 +106,14 @@ fun SignInScreen(
                     Text("Enter Username and password to Signin")
                 }
             }
+
+            Button(onClick = {
+                viewModel.getFirebaseToken()
+            }) {Text("Send Push Notification") }
+
+            TextField(value = signInUiState.localToken?:"" , onValueChange = {/*viewModel.updateToken(it)*/})
         }
+
+
     }
 }

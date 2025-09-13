@@ -6,27 +6,42 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.cusotmauthtest.screens.ChatScreen
 import com.example.cusotmauthtest.screens.HomeScreen
 import com.example.cusotmauthtest.screens.RegisterScreen
+import com.example.cusotmauthtest.screens.SharedVideoViewModel
 import com.example.cusotmauthtest.screens.SignInScreen
+import com.example.cusotmauthtest.screens.SplashScreen
+import com.example.cusotmauthtest.screens.UploadVideScreen
+import com.example.cusotmauthtest.screens.UsersForChatScreen
+import com.example.cusotmauthtest.screens.ViewVideoScreen
 
 enum class AuthTestScreens(val title: String){
+    SplashScreen(title = "Splash"),
     SignInScreen(title = "SignIn"),
     RegisterScreen(title = "Register"),
-    HomeScreen(title = "Home")
+    HomeScreen(title = "Home"),
+    UploadVideoScreen(title = "UploadVide"),
+    ViewVideoScreen(title = "ViewVideo"),
+    ChatUsersScreen(title = "ChatUsers"),
+    ChatScreen(title = "ChatScreen")
 }
 
 @Composable
 fun AuthTestApp(
-    navController : NavHostController = rememberNavController()
+    navController : NavHostController = rememberNavController(),
+    sharedViewModel: SharedVideoViewModel = viewModel()
 ) {
     NavHost(
         navController = navController ,
-        startDestination = AuthTestScreens.SignInScreen.name ,
-        modifier = Modifier
+        startDestination = AuthTestScreens.SplashScreen.name
     ){
+        composable(route = AuthTestScreens.SplashScreen.name) {
+            SplashScreen(navController = navController)
+        }
         composable(route = AuthTestScreens.RegisterScreen.name) {
             RegisterScreen(navController = navController)
         }
@@ -34,7 +49,19 @@ fun AuthTestApp(
             SignInScreen(navController = navController)
         }
         composable(route = AuthTestScreens.HomeScreen.name) {
-            HomeScreen(navController = navController)
+            HomeScreen(navController = navController , sharedViewModel = sharedViewModel)
+        }
+        composable(route = AuthTestScreens.ViewVideoScreen.name) {
+            ViewVideoScreen(navController = navController, sharedVideoViewModel = sharedViewModel)
+        }
+        composable(route = AuthTestScreens.ChatUsersScreen.name) {
+            UsersForChatScreen(navController = navController, sharedViewModel = sharedViewModel)
+        }
+        composable(route = AuthTestScreens.ChatScreen.name) {
+            ChatScreen(navController = navController , sharedVideoViewModel = sharedViewModel)
+        }
+        composable(route = AuthTestScreens.UploadVideoScreen.name) {
+            UploadVideScreen(navController = navController)
         }
     }
 }

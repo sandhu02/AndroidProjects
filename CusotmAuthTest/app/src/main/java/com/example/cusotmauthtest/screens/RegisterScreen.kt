@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -30,7 +31,7 @@ import com.example.cusotmauthtest.AuthTestViewModelFactory
 @Composable
 fun RegisterScreen(
     navController: NavController,
-    viewModel: RegisterViewModel = viewModel(factory = AuthTestViewModelFactory())
+    viewModel: RegisterViewModel = viewModel(factory = AuthTestViewModelFactory(LocalContext.current))
 ) {
     val registerUiState by viewModel.registerUiState.collectAsState()
 
